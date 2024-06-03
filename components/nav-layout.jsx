@@ -1,23 +1,18 @@
+"use client"
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
-	ChevronLeft,
-	ChevronRight,
-	Copy,
-	CreditCard,
-	File,
 	Home,
+	Leaf,
 	LineChart,
-	ListFilter,
-	MoreVertical,
 	Package,
 	Package2,
 	PanelLeft,
 	Search,
 	Settings,
 	ShoppingCart,
-	Truck,
+	Sprout,
 	Users2,
 } from "lucide-react"
 import {
@@ -47,82 +42,75 @@ import {
 	TooltipProvider,
 } from "@/components/ui/tooltip"
 import { ModeToggle } from "./mode-toggle"
+import { usePathname } from "next/navigation"
+
+const navLinks = [
+	{
+		href: "/dashboard",
+		icon: <Home className="h-5 w-5" />,
+		label: "Dashboard",
+	},
+	{
+		href: "/orders",
+		icon: <ShoppingCart className="h-5 w-5" />,
+		label: "Orders",
+	},
+	{
+		href: "/products",
+		icon: <Package className="h-5 w-5" />,
+		label: "Products",
+	},
+	{
+		href: "/customers",
+		icon: <Users2 className="h-5 w-5" />,
+		label: "Customers",
+	},
+	{
+		href: "/analytics",
+		icon: <LineChart className="h-5 w-5" />,
+		label: "Analytics",
+	},
+	{
+		href: "/settings",
+		icon: <Settings className="h-5 w-5" />,
+		label: "Settings",
+	},
+]
 
 export function NavLayout({ children }) {
+	const path = usePathname()
+	const pathNames = path.split("/").filter(Boolean)
+
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 				<nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
 					<Link
-						href="#"
+						href="/"
 						className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
-						<Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-						<span className="sr-only">Acme Inc</span>
+						<Leaf className="h-4 w-4 transition-all group-hover:scale-110" />
+						<span className="sr-only">
+							Greenhouse Management System
+						</span>
 					</Link>
 					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href="#"
-									className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<Home className="h-5 w-5" />
-									<span className="sr-only">Dashboard</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side="right">
-								Dashboard
-							</TooltipContent>
-						</Tooltip>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href="#"
-									className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<ShoppingCart className="h-5 w-5" />
-									<span className="sr-only">Orders</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side="right">Orders</TooltipContent>
-						</Tooltip>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href="#"
-									className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<Package className="h-5 w-5" />
-									<span className="sr-only">Products</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side="right">
-								Products
-							</TooltipContent>
-						</Tooltip>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href="#"
-									className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<Users2 className="h-5 w-5" />
-									<span className="sr-only">Customers</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side="right">
-								Customers
-							</TooltipContent>
-						</Tooltip>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href="#"
-									className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<LineChart className="h-5 w-5" />
-									<span className="sr-only">Analytics</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side="right">
-								Analytics
-							</TooltipContent>
-						</Tooltip>
+						{navLinks.slice(0, -1).map((link, index) => (
+							<Tooltip key={index}>
+								<TooltipTrigger asChild>
+									<Link
+										href={link.href}
+										className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
+										{link.icon}
+										<span className="sr-only">
+											{link.label}
+										</span>
+									</Link>
+								</TooltipTrigger>
+								<TooltipContent side="right">
+									{link.label}
+								</TooltipContent>
+							</Tooltip>
+						))}
 					</TooltipProvider>
 				</nav>
 				<nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
@@ -130,14 +118,16 @@ export function NavLayout({ children }) {
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Link
-									href="#"
+									href={navLinks[navLinks.length - 1].href}
 									className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-									<Settings className="h-5 w-5" />
-									<span className="sr-only">Settings</span>
+									{navLinks[navLinks.length - 1].icon}
+									<span className="sr-only">
+										{navLinks[navLinks.length - 1].label}
+									</span>
 								</Link>
 							</TooltipTrigger>
 							<TooltipContent side="right">
-								Settings
+								{navLinks[navLinks.length - 1].label}
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
@@ -160,61 +150,43 @@ export function NavLayout({ children }) {
 							className="sm:max-w-xs">
 							<nav className="grid gap-6 text-lg font-medium">
 								<Link
-									href="#"
+									href="/"
 									className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
-									<Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-									<span className="sr-only">Acme Inc</span>
+									<Leaf className="h-5 w-5 transition-all group-hover:scale-110" />
+									<span className="sr-only">
+										Greenhouse Management System
+									</span>
 								</Link>
-								<Link
-									href="#"
-									className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
-									<Home className="h-5 w-5" />
-									Dashboard
-								</Link>
-								<Link
-									href="#"
-									className="flex items-center gap-4 px-2.5 text-foreground">
-									<ShoppingCart className="h-5 w-5" />
-									Orders
-								</Link>
-								<Link
-									href="#"
-									className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
-									<Package className="h-5 w-5" />
-									Products
-								</Link>
-								<Link
-									href="#"
-									className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
-									<Users2 className="h-5 w-5" />
-									Customers
-								</Link>
-								<Link
-									href="#"
-									className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
-									<LineChart className="h-5 w-5" />
-									Settings
-								</Link>
+								{navLinks.map((link, index) => (
+									<Link
+										key={index}
+										href={link.href}
+										className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
+										{link.icon}
+										{link.label}
+									</Link>
+								))}
 							</nav>
 						</SheetContent>
 					</Sheet>
 					<Breadcrumb className="hidden md:flex">
 						<BreadcrumbList>
-							<BreadcrumbItem>
-								<BreadcrumbLink asChild>
-									<Link href="#">Dashboard</Link>
-								</BreadcrumbLink>
-							</BreadcrumbItem>
-							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								<BreadcrumbLink asChild>
-									<Link href="#">Orders</Link>
-								</BreadcrumbLink>
-							</BreadcrumbItem>
-							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								<BreadcrumbPage>Recent Orders</BreadcrumbPage>
-							</BreadcrumbItem>
+							{pathNames.map((name, index) => (
+								<>
+									{index > 0 && <BreadcrumbSeparator />}
+									<BreadcrumbItem key={index}>
+										<BreadcrumbLink asChild>
+											<Link
+												href={`/${path
+													.split("/")
+													.slice(1, index + 1)
+													.join("/")}`}>
+												{name}
+											</Link>
+										</BreadcrumbLink>
+									</BreadcrumbItem>
+								</>
+							))}
 						</BreadcrumbList>
 					</Breadcrumb>
 					<div className="relative ml-auto flex-1 md:grow-0">
@@ -242,12 +214,20 @@ export function NavLayout({ children }) {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							<DropdownMenuLabel>My Account</DropdownMenuLabel>
+							<DropdownMenuLabel>
+								<Link href="/account">My Account</Link>
+							</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>Settings</DropdownMenuItem>
-							<DropdownMenuItem>Support</DropdownMenuItem>
+							<DropdownMenuItem>
+								<Link href="/settings">Settings</Link>
+							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>Logout</DropdownMenuItem>
+							<DropdownMenuItem>
+								<Link href="/login">Login</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem>
+								<Link href="/logout">Logout</Link>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</header>
