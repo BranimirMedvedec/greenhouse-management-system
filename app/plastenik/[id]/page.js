@@ -1,7 +1,7 @@
 // PlastenikPage.js
 "use client";
 import { useParams } from 'next/navigation';
-import mockData from '@/mock-data/greenhouseData';
+import mockData from '@/public/mock-data/greenhouseData';
 
 export default function PlastenikPage () {
   const params = useParams();
