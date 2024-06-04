@@ -5,32 +5,32 @@ export const greenhouses = [
 	{
 		title: "Plastenik 1",
 		description: "Plastenik 1 sadrzi paradajz",
-		link: "http://localhost:3000/plastenik1",
+		link: "http://localhost:3000/plastenik/1",
 	},
 	{
 		title: "Plastenik 2",
 		description: "Plastenik 2 sadrzi papriku",
-		link: "http://localhost:3000/plastenik2",
+		link: "http://localhost:3000/plastenik/2",
 	},
 	{
 		title: "Plastenik 3",
 		description: "Plastenik 3 sadrzi krastavac",
-		link: "http://localhost:3000/plastenik3",
+		link: "http://localhost:3000/plastenik/3",
 	},
 	{
 		title: "Plastenik 4",
 		description: "Plastenik 4 sadrzi krumpir",
-		link: "http://localhost:3000/plastenik4",
+		link: "http://localhost:3000/plastenik/4",
 	},
 	{
 		title: "Plastenik 5",
 		description: "Plastenik 5 sadrzi luk",
-		link: "http://localhost:3000/plastenik5",
+		link: "http://localhost:3000/plastenik/5",
 	},
 	{
 		title: "Plastenik 6",
 		description: "Plastenik 6 sadrzi mrkvu",
-		link: "http://localhost:3000/plastenik6",
+		link: "http://localhost:3000/plastenik/6",
 	},
 ]
 
