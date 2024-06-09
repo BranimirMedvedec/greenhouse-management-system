@@ -46,29 +46,14 @@ import { usePathname } from "next/navigation"
 
 const navLinks = [
 	{
-		href: "/dashboard",
+		href: "/",
 		icon: <Home className="h-5 w-5" />,
-		label: "Dashboard",
+		label: "Home",
 	},
 	{
-		href: "/orders",
-		icon: <ShoppingCart className="h-5 w-5" />,
-		label: "Orders",
-	},
-	{
-		href: "/products",
-		icon: <Package className="h-5 w-5" />,
-		label: "Products",
-	},
-	{
-		href: "/customers",
-		icon: <Users2 className="h-5 w-5" />,
-		label: "Customers",
-	},
-	{
-		href: "/analytics",
-		icon: <LineChart className="h-5 w-5" />,
-		label: "Analytics",
+		href: "/greenhouse",
+		icon: <Sprout className="h-5 w-5" />,
+		label: "Greenhouse",
 	},
 	{
 		href: "/settings",
