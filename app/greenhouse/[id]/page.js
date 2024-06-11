@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 
-export default function GreenhousePage () {
+export default function Greenhouse() {
 	const [temperature, setTemperature] = useState('');
 	const [humidity, setHumidity] = useState('');
 	const [mode, setMode] = useState('automatic');

@@ -1,44 +1,21 @@
-"use client"
-import { HoverEffect } from "@/components/ui/card-hover-effect"
-
-export const greenhouses = [
-	{
-		title: "Plastenik 1",
-		description: "Plastenik 1 sadrzi paradajz",
-		link: "/greenhouse/1",
-	},
-	{
-		title: "Plastenik 2",
-		description: "Plastenik 2 sadrzi papriku",
-		link: "/greenhouse/2",
-	},
-	{
-		title: "Plastenik 3",
-		description: "Plastenik 3 sadrzi krastavac",
-		link: "/greenhouse/3",
-	},
-	{
-		title: "Plastenik 4",
-		description: "Plastenik 4 sadrzi krumpir",
-		link: "/greenhouse/4",
-	},
-	{
-		title: "Plastenik 5",
-		description: "Plastenik 5 sadrzi luk",
-		link: "/greenhouse/5",
-	},
-	{
-		title: "Plastenik 6",
-		description: "Plastenik 6 sadrzi mrkvu",
-		link: "/greenhouse/6",
-	},
-]
+import { checkApiStatus } from "@/lib/actions"
 
 export default function Home() {
+	// const message = checkApiStatus()
+	const message = { message: "API is not running" }
 
 	return (
-		<div className="max-w-7xl mx-auto px-8">
-			<HoverEffect items={greenhouses} />
+		<div className="flex flex-col items-center min-h-screen py-2">
+			<h1 className="text-2xl font-bold">
+				Welcome to Greenhouse Management System
+			</h1>
+
+			<div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
+				<div className="p-6 mt-6 text-left border w-96 rounded-xl">
+					<h3 className="text-2xl font-bold">API Status</h3>
+					<p className="mt-4 text-xl">{message.message}</p>
+				</div>
+			</div>
 		</div>
 	)
 }

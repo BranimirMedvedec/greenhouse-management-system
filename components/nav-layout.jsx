@@ -2,31 +2,17 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import {
-	Home,
-	Leaf,
-	LineChart,
-	Package,
-	Package2,
-	PanelLeft,
-	Search,
-	Settings,
-	ShoppingCart,
-	Sprout,
-	Users2,
-} from "lucide-react"
+import { Home, Leaf, PanelLeft, Search, Settings, Sprout } from "lucide-react"
 import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
@@ -79,8 +65,8 @@ export function NavLayout({ children }) {
 						</span>
 					</Link>
 					<TooltipProvider>
-						{navLinks.slice(0, -1).map((link, index) => (
-							<Tooltip key={index}>
+						{navLinks.slice(0, -1).map((link) => (
+							<Tooltip key={link.href}>
 								<TooltipTrigger asChild>
 									<Link
 										href={link.href}
@@ -100,7 +86,7 @@ export function NavLayout({ children }) {
 				</nav>
 				<nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
 					<TooltipProvider>
-						<Tooltip>
+						<Tooltip key={navLinks[navLinks.length - 1].href}>
 							<TooltipTrigger asChild>
 								<Link
 									href={navLinks[navLinks.length - 1].href}
@@ -142,9 +128,9 @@ export function NavLayout({ children }) {
 										Greenhouse Management System
 									</span>
 								</Link>
-								{navLinks.map((link, index) => (
+								{navLinks.map((link) => (
 									<Link
-										key={index}
+										key={link.href}
 										href={link.href}
 										className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
 										{link.icon}
@@ -157,20 +143,19 @@ export function NavLayout({ children }) {
 					<Breadcrumb className="hidden md:flex">
 						<BreadcrumbList>
 							{pathNames.map((name, index) => (
-								<>
+								<React.Fragment key={name}>
 									{index > 0 && <BreadcrumbSeparator />}
-									<BreadcrumbItem key={index}>
+									<BreadcrumbItem>
 										<BreadcrumbLink asChild>
 											<Link
-												href={`/${path
-													.split("/")
-													.slice(1, index + 1)
+												href={`/${pathNames
+													.slice(0, index + 1)
 													.join("/")}`}>
 												{name}
 											</Link>
 										</BreadcrumbLink>
 									</BreadcrumbItem>
-								</>
+								</React.Fragment>
 							))}
 						</BreadcrumbList>
 					</Breadcrumb>
@@ -183,38 +168,6 @@ export function NavLayout({ children }) {
 						/>
 					</div>
 					<ModeToggle />
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant="outline"
-								size="icon"
-								className="overflow-hidden rounded-full">
-								<Image
-									src="/vercel.svg"
-									width={36}
-									height={36}
-									alt="Avatar"
-									className="overflow-hidden rounded-full"
-								/>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuLabel>
-								<Link href="/account">My Account</Link>
-							</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Link href="/settings">Settings</Link>
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Link href="/login">Login</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/logout">Logout</Link>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
 				</header>
 				<main>{children}</main>
 			</div>
