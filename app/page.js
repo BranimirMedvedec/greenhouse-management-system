@@ -1,21 +1,45 @@
-import { checkApiStatus } from "@/lib/actions"
+import { checkApiStatus, getConfig } from "@/lib/actions"
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card"
 
-export default function Home() {
-	// const message = checkApiStatus()
-	const message = { message: "API is not running" }
+export default async function Home() {
+	let apiStatus
+	try {
+		apiStatus = await checkApiStatus()
+	} catch (error) {
+		apiStatus = { message: "API is not running" }
+		console.log(error)
+	}
 
 	return (
-		<div className="flex flex-col items-center min-h-screen py-2">
-			<h1 className="text-2xl font-bold">
+		<div className="flex flex-col min-h-screen gap-10 items-center">
+			<h1 className="text-2xl font-bold mt-2">
 				Welcome to Greenhouse Management System
 			</h1>
 
-			<div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-				<div className="p-6 mt-6 text-left border w-96 rounded-xl">
-					<h3 className="text-2xl font-bold">API Status</h3>
-					<p className="mt-4 text-xl">{message.message}</p>
-				</div>
-			</div>
+			<Card className="text-center w-60">
+				<CardHeader>
+					<CardTitle>
+						<h3>API Status</h3>
+					</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<div className="flex gap-4 justify-center items-center">
+						<p>{apiStatus.message}</p>
+						{apiStatus.message === "API running." ? (
+							<span className="flex h-3 w-3 rounded-full bg-green-500" />
+						) : (
+							<span className="flex h-3 w-3 rounded-full bg-red-500" />
+						)}
+					</div>
+				</CardContent>
+			</Card>
 		</div>
 	)
 }
