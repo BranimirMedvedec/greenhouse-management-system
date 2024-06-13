@@ -8,13 +8,25 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
+import { getState } from "@/lib/actions"
 
-export default function Greenhouse() {
+export default async function Greenhouse() {
 	const [temperature, setTemperature] = useState("")
 	const [humidity, setHumidity] = useState("")
 	const [mode, setMode] = useState("automatic")
 	const [heaterOn, setHeaterOn] = useState(false)
 	const [sprinklerOn, setSprinklerOn] = useState(false)
+	const params = useParams()
+	const { id } = params
+	const data = mockData.find((plastenik) => plastenik.id === parseInt(id))
+
+	let staklenik
+	try {
+		staklenik = await getState(id)
+	} catch (error) {
+		staklenik = { message: "API is not running" }
+		console.log(error)
+	}
 
 	const handleTemperatureChange = (e) => {
 		const value = e.target.value
@@ -43,10 +55,6 @@ export default function Greenhouse() {
 	const toggleSprinkler = () => {
 		setSprinklerOn((prev) => !prev)
 	}
-
-	const params = useParams()
-	const { id } = params
-	const data = mockData.find((plastenik) => plastenik.id === parseInt(id))
 
 	if (!data) {
 		return <div>Plastenik nije pronađen</div>
@@ -200,6 +208,10 @@ export default function Greenhouse() {
 						</div>
 					</TabsContent>
 				</Tabs>
+			</div>
+
+			<div>
+				<pre>{JSON.stringify(staklenik, null, 2)}</pre>
 			</div>
 		</div>
 	)

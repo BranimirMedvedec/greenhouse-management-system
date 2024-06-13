@@ -1,12 +1,5 @@
-import { checkApiStatus, getConfig } from "@/lib/actions"
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card"
+import { checkApiStatus } from "@/lib/actions"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default async function Home() {
 	let apiStatus
@@ -25,9 +18,7 @@ export default async function Home() {
 
 			<Card className="text-center w-60">
 				<CardHeader>
-					<CardTitle>
-						<h3>API Status</h3>
-					</CardTitle>
+					<CardTitle>API Status</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<div className="flex gap-4 justify-center items-center">

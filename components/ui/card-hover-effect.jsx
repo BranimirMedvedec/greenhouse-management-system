@@ -15,7 +15,7 @@ export const HoverEffect = ({ items, className }) => {
 			)}>
 			{items.map((item, idx) => (
 				<Link
-					href={item?.entity_id}
+					href={"greenhouse/" + item?.entity_id}
 					key={item?.entity_id}
 					className="relative group block p-2 h-full w-full"
 					onMouseEnter={() => setHoveredIndex(idx)}
@@ -38,10 +38,8 @@ export const HoverEffect = ({ items, className }) => {
 						)}
 					</AnimatePresence>
 					<Card>
-						<CardTitle>{item.attributes.friendly_name}</CardTitle>
-						{/* <CardDescription>
-							{item.attributes.temperature}
-						</CardDescription> */}
+						<CardTitle>{item.friendly_name}</CardTitle>
+						<CardDescription>nekakav opis</CardDescription>
 					</Card>
 				</Link>
 			))}
@@ -66,7 +64,7 @@ export const CardTitle = ({ className, children }) => {
 	return (
 		<h4
 			className={cn(
-				"text-zinc-100 font-bold tracking-wide mt-4",
+				"text-zinc-100 font-bold tracking-wide mt-4 text-center",
 				className
 			)}>
 			{children}
@@ -77,7 +75,7 @@ export const CardDescription = ({ className, children }) => {
 	return (
 		<p
 			className={cn(
-				"mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm",
+				"mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm text-center",
 				className
 			)}>
 			{children}
