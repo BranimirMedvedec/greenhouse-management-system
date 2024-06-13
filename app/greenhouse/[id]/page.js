@@ -3,30 +3,52 @@
 import { useParams } from "next/navigation"
 import mockData from "@/public/mock-data/greenhouseData"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 import { getState } from "@/lib/actions"
 
-export default async function Greenhouse() {
+export default function Greenhouse() {
 	const [temperature, setTemperature] = useState("")
+	const [heaterLastOperation, setHeaterLastOperation] = useState("")
+	const [sprinklerLastOperation, setSprinklerLastOperation] = useState("")
 	const [humidity, setHumidity] = useState("")
 	const [mode, setMode] = useState("automatic")
 	const [heaterOn, setHeaterOn] = useState(false)
 	const [sprinklerOn, setSprinklerOn] = useState(false)
+	const [staklenik, setStaklenik] = useState({})
 	const params = useParams()
 	const { id } = params
 	const data = mockData.find((plastenik) => plastenik.id === parseInt(id))
 
-	let staklenik
-	try {
-		staklenik = await getState(id)
-	} catch (error) {
-		staklenik = { message: "API is not running" }
-		console.log(error)
-	}
+
+	useEffect(() => {
+		const fetchData = async () => {
+				try {
+						const data = await getState(id)
+						setStaklenik(data?.data)
+						const temperatureSensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s1`)[0]
+						const humiditySensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s2`)[0]
+						const sprinklerActuatorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}a1`)[0]
+						const heaterActuatorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}a2`)[0]
+						setTemperature(temperatureSensorData.state)
+						setHumidity(humiditySensorData.state)
+						setHeaterLastOperation(heaterActuatorData.last_reported)
+						setSprinklerLastOperation(sprinklerActuatorData.last_reported)
+						if (sprinklerActuatorData.state === "1" && heaterActuatorData.state === "1") {
+							setMode('automatic')
+						} else if (sprinklerActuatorData.state === "0" && heaterActuatorData.state === "1") {
+							setMode('manual')
+						}
+				} catch (error) {
+						console.error(error)
+				}
+		}
+
+		fetchData()
+}, [staklenik])
 
 	const handleTemperatureChange = (e) => {
 		const value = e.target.value
@@ -90,19 +112,19 @@ export default async function Greenhouse() {
 						<div className="text-left mt-12">
 							<p>
 								<strong>Vrijeme zadnjeg zalijevanja:</strong>{" "}
-								{formatDate(data.lastWatered)}
+								{formatDate(sprinklerLastOperation)}
 							</p>
 							<p>
 								<strong>Vrijeme zadnjeg zagrijavanja:</strong>{" "}
-								{formatDate(data.lastHeated)}
+								{formatDate(heaterLastOperation)}
 							</p>
 							<p>
 								<strong>Trenutna temperatura:</strong>{" "}
-								{data.currentTemperature}°C
+								{temperature}°C
 							</p>
 							<p>
 								<strong>Trenutna vlaga:</strong>{" "}
-								{data.currentHumidity}%
+								{humidity}%
 							</p>
 							<p>
 								<strong>
@@ -145,7 +167,7 @@ export default async function Greenhouse() {
 						</div>
 					</TabsContent>
 					<TabsContent value="historic">
-						Change your password here.
+						Data in the last 24h:
 					</TabsContent>
 					<TabsContent value="settings">
 						<div className="mb-4">
