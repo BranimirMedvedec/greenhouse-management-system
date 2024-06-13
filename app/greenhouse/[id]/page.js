@@ -96,7 +96,7 @@ export default function Greenhouse() {
 
 	return (
 		<div className="max-w-7xl mx-auto px-8 mt-12">
-			<h1 className="text-center text-4xl font-bold">Plastenik {id}</h1>
+			<h1 className="text-center text-4xl font-bold">Staklenik {id}</h1>
 			<div className="text-center flex justify-center mt-12">
 				<Tabs
 					defaultValue="current"
