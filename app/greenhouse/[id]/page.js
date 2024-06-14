@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
-import { getState } from "@/lib/actions"
+import { getState, toggleActuator } from "@/lib/actions"
 
 export default function Greenhouse() {
 	const [temperature, setTemperature] = useState("")
@@ -16,9 +16,9 @@ export default function Greenhouse() {
 	const [sprinklerLastOperation, setSprinklerLastOperation] = useState("")
 	const [humidity, setHumidity] = useState("")
 	const [mode, setMode] = useState("automatic")
-	const [heaterOn, setHeaterOn] = useState(false)
-	const [sprinklerOn, setSprinklerOn] = useState(false)
-	const [staklenik, setStaklenik] = useState({})
+	const [heaterOn, setHeaterOn] = useState(-1)
+	const [sprinklerOn, setSprinklerOn] = useState(-1)
+	let staklenik
 	const params = useParams()
 	const { id } = params
 	const data = mockData.find((plastenik) => plastenik.id === parseInt(id))
@@ -28,8 +28,7 @@ export default function Greenhouse() {
 		const fetchData = async () => {
 				try {
 						const data = await getState(id)
-						console.log(data)
-						setStaklenik(data)
+						staklenik = data
 						const temperatureSensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s1`)[0]
 						const humiditySensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s2`)[0]
 						const sprinklerActuatorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}a1`)[0]
@@ -41,6 +40,8 @@ export default function Greenhouse() {
 						if (sprinklerActuatorData.state === "0" && heaterActuatorData.state === "0") {
 							setMode('automatic')
 						} else {
+							setHeaterOn(heaterActuatorData.state)
+							setSprinklerOn(sprinklerActuatorData.state)
 							setMode('manual')
 						}
 				} catch (error) {
@@ -50,6 +51,31 @@ export default function Greenhouse() {
 
 		fetchData()
 }, [staklenik])
+
+useEffect(() => {
+	const fetchData = async () => {
+			try {
+					const data = await toggleActuator(id, 1, heaterOn)
+					console.log(data)
+			} catch (error) {
+					console.error(error)
+			}
+	}
+
+	fetchData()
+}, [heaterOn])
+useEffect(() => {
+	const fetchData = async () => {
+			try {
+					const data = await toggleActuator(id, 2, sprinklerOn)
+					console.log(data)
+			} catch (error) {
+					console.error(error)
+			}
+	}
+
+	fetchData()
+}, [sprinklerOn])
 
 	const handleTemperatureChange = (e) => {
 		const value = e.target.value
@@ -72,11 +98,26 @@ export default function Greenhouse() {
 	}
 
 	const toggleHeater = () => {
-		setHeaterOn((prev) => !prev)
+		if (heaterOn == -1) {
+			setHeaterOn(1)
+
+		} else if (heaterOn == 1) {
+			setHeaterOn(-1)
+		}
 	}
 
+	
+
 	const toggleSprinkler = () => {
-		setSprinklerOn((prev) => !prev)
+		console.log('pozvan', sprinklerOn)
+		if (sprinklerOn == -1) {
+			console.log(sprinklerOn)
+			setSprinklerOn(1)
+			
+			} else if (sprinklerOn == 1) {
+			console.log(sprinklerOn)
+			setSprinklerOn(-1)
+		}
 	}
 
 	if (!data) {
@@ -143,25 +184,25 @@ export default function Greenhouse() {
 								<div className="flex space-x-4 mt-4">
 									<Button
 										className={`${
-											heaterOn
+											heaterOn != -1
 												? "bg-red-500 hover:bg-red-700"
 												: "bg-green-500 hover:bg-green-700"
 										} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
 										onClick={toggleHeater}>
-										{heaterOn
+										{heaterOn != -1
 											? "Turn off heater"
 											: "Turn on heater"}
 									</Button>
 									<Button
 										className={`${
-											sprinklerOn
+											sprinklerOn != -1
 												? "bg-red-500 hover:bg-red-700"
 												: "bg-blue-500 hover:bg-blue-700"
 										} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
 										onClick={toggleSprinkler}>
-										{sprinklerOn
-											? "Turn off sprinkles"
-											: "Turn on sprinkles"}
+										{sprinklerOn != -1
+											? "Turn off sprinklers"
+											: "Turn on sprinklers"}
 									</Button>
 								</div>
 							)}
