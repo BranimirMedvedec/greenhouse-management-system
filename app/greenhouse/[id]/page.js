@@ -28,7 +28,8 @@ export default function Greenhouse() {
 		const fetchData = async () => {
 				try {
 						const data = await getState(id)
-						setStaklenik(data?.data)
+						console.log(data)
+						setStaklenik(data)
 						const temperatureSensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s1`)[0]
 						const humiditySensorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}s2`)[0]
 						const sprinklerActuatorData = staklenik.filter(i => i.attributes.friendly_name === `s${id}a1`)[0]
@@ -37,9 +38,9 @@ export default function Greenhouse() {
 						setHumidity(humiditySensorData.state)
 						setHeaterLastOperation(heaterActuatorData.last_reported)
 						setSprinklerLastOperation(sprinklerActuatorData.last_reported)
-						if (sprinklerActuatorData.state === "1" && heaterActuatorData.state === "1") {
+						if (sprinklerActuatorData.state === "0" && heaterActuatorData.state === "0") {
 							setMode('automatic')
-						} else if (sprinklerActuatorData.state === "0" && heaterActuatorData.state === "1") {
+						} else {
 							setMode('manual')
 						}
 				} catch (error) {
@@ -230,10 +231,6 @@ export default function Greenhouse() {
 						</div>
 					</TabsContent>
 				</Tabs>
-			</div>
-
-			<div>
-				<pre>{JSON.stringify(staklenik, null, 2)}</pre>
 			</div>
 		</div>
 	)
